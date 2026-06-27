@@ -7,84 +7,88 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login page", style: TextStyle(color: Theme.of(context).indicatorColor),),
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(10),
-              height: 370,
-              color: Colors.white,
-              child: Card.outlined(
-                child: Column(
-                  children: [
-                    Image(image: AssetImage("images/enset-logo.png")),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: userNameController,
-                      decoration: InputDecoration(
-                        hintText: "Your username",
-                        suffixIcon: Icon(Icons.lock),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Theme.of(context).primaryColor
-                          )
-                        )
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "Your password",
-                        // icon: Icon(Icons.lock),
-                        // prefixIcon: Icon(Icons.lock),
-                          suffixIcon: Icon(Icons.visibility),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).primaryColor
+        appBar: AppBar(
+          title: Text("Login page", style: TextStyle(color: Theme.of(context).indicatorColor),),
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
+                height: 400,
+                color: Colors.white,
+                child: Card.outlined(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        Image(image: AssetImage("images/enset-logo.png"), width: 300,),
+                        SizedBox(height: 10),
+                        TextFormField(
+                          controller: userNameController,
+                          decoration: InputDecoration(
+                              hintText: "Your username",
+                              suffixIcon: Icon(Icons.lock),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color: Theme.of(context).primaryColor
+                                  )
                               )
-                          )
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(onPressed: () {
-                        String userName = userNameController.text;
-                        String password = passwordController.text;
-                        if(userName == "admin" && password == "1234"){
-                          print("You are in");
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor
-                      ),
-                      child: Text("Login", style: TextStyle(
-                          fontSize: 22,
-                          color: Theme.of(context).indicatorColor
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              hintText: "Your password",
+                              // icon: Icon(Icons.lock),
+                              // prefixIcon: Icon(Icons.lock),
+                              suffixIcon: Icon(Icons.visibility),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color: Theme.of(context).primaryColor
+                                  )
+                              )
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(onPressed: () {
+                            String userName = userNameController.text;
+                            String password = passwordController.text;
+                            if(userName == "admin" && password == "1234") {
+                              Navigator.of(context).pop();
+                              Navigator.pushNamed(context, "/bot");
+                            }
+                          },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).primaryColor
+                              ),
+                              child: Text("Login", style: TextStyle(
+                                  fontSize: 22,
+                                  color: Theme.of(context).indicatorColor
+                              ),
+                              )
                           ),
                         )
-                      ),
-                    )
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
-      )
+              )
+            ],
+          ),
+        )
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dwm_bot/pages/chatbot.page.dart';
 import 'package:flutter/material.dart';
 import 'package:dwm_bot/pages/login.page.dart';
 void main(){
@@ -10,6 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        "/bot": (context) => ChatBotPage()
+      },
       theme: ThemeData(
         primaryColor: Colors.teal
       ),
