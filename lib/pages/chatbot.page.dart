@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import  'package:http/http.dart' as http;
 
 class ChatBotPage extends StatefulWidget {
   ChatBotPage({super.key});
@@ -8,12 +11,10 @@ class ChatBotPage extends StatefulWidget {
 }
 
 class _ChatBotPageState extends State<ChatBotPage> {
-  var messages = [
-    {"type": "user", "content": "Hello"},
-    {"type": "assistant", "content": "How can I help you?"},
-  ];
+  var messages = [];
 
   TextEditingController userQuestion = TextEditingController();
+  ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(onPressed: () {
-            Navigator.of(context).pop;
+            Navigator.of(context).pop();
             Navigator.pushNamed(context, '/');
           },
               icon: Icon(Icons.logout),
@@ -35,25 +36,26 @@ class _ChatBotPageState extends State<ChatBotPage> {
       body: Column(
         children: [
           Expanded(child: ListView.builder(
+            controller: scrollController,
             itemCount: messages.length,
             itemBuilder: (context, index) {
               return Column(
                 children: [
                   Row(
                     children: [
-                      messages[index]["type"] == "user"
+                      messages[index]["role"] == "user"
                           ? SizedBox(width: 80)
                           : SizedBox(width: 0),
                       Expanded(
                         child: Card.outlined(
                           margin: EdgeInsets.all(6),
-                          color: messages[index]['type'] == "user" ? Color.fromARGB(40, 0, 255, 0) : Colors.white,
+                          color: messages[index]['role'] == "user" ? Color.fromARGB(40, 0, 255, 0) : Colors.white,
                           child: ListTile(
                             title: Text("${messages[index]['content']}"),
                           ),
                         ),
                       ),
-                      messages[index]["type"] == "assistant"
+                      messages[index]["role"] == "assistant"
                           ? SizedBox(width: 80)
                           : SizedBox(width: 0),
                     ],
@@ -85,12 +87,51 @@ class _ChatBotPageState extends State<ChatBotPage> {
                   ),
                 ),
                 IconButton(onPressed: () {
-                  String question = userQuestion.text;
-                  String answer = "Answer to ${question}";
+                  String question = userQuestion.text.trim();
+                  if(question.isEmpty) return;
+
                   setState(() {
-                    messages.add({"type": "user", "content": question});
-                    messages.add({"type": "assistant", "content": answer});
+                    messages.add({"role": "user", "content": question});
+                    userQuestion.clear();
                   });
+
+
+                  // Uri uri = Uri.https("api.openai.com", "/v1/chat/completions");
+                  // Uri uri = Uri.parse("https://api.openai.com/v1/chat/completions");
+                  Uri uri = Uri.parse("http://192.168.100.97:11434/v1/chat/completions");
+
+
+                  var headers = {
+                    "Content-Type": "application/json",
+                  };
+
+                  var body = {
+                    "model": "llama3.2",
+                    // "model": "gpt-5.4-mini",
+                    "messages": messages
+                  };
+
+                  http.post(uri, headers: headers, body: json.encode(body))
+                  .then((resp) {
+
+                    var aiResponse = json.decode(resp.body);
+                    print(aiResponse);
+                    String answer = aiResponse["choices"][0]["message"]["content"];
+
+                    setState(() {
+                      messages.add({"role": "assistant", "content": answer});
+                      scrollController.jumpTo(
+                          scrollController.position.maxScrollExtent + 800
+                      );
+                    });
+
+                  }).catchError((err) {
+                    print("****************************************");
+                    print(err);
+                    print("****************************************");
+                  });
+
+
                 },
                   icon: Icon(Icons.send )
                 )
