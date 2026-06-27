@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
+  LoginPage({super.key});
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +27,9 @@ class LoginPage extends StatelessWidget {
                     Image(image: AssetImage("images/enset-logo.png")),
                     SizedBox(height: 10),
                     TextFormField(
+                      controller: userNameController,
                       decoration: InputDecoration(
                         hintText: "Your username",
-                        // icon: Icon(Icons.lock),
-                        // prefixIcon: Icon(Icons.lock),
                         suffixIcon: Icon(Icons.lock),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -42,6 +42,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     TextFormField(
+                      controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         hintText: "Your password",
@@ -60,14 +61,21 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor
+                      child: ElevatedButton(onPressed: () {
+                        String userName = userNameController.text;
+                        String password = passwordController.text;
+                        if(userName == "admin" && password == "1234"){
+                          print("You are in");
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor
+                      ),
+                      child: Text("Login", style: TextStyle(
+                          fontSize: 22,
+                          color: Theme.of(context).indicatorColor
                           ),
-                          child: Text("Login", style: TextStyle(
-                              fontSize: 22,
-                              color: Theme.of(context).indicatorColor
-                          ))
+                        )
                       ),
                     )
                   ],
